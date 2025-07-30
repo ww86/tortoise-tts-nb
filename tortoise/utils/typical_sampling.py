@@ -3,7 +3,7 @@ import torch
 # Replace the old import with a new, more robust one
 
 try:
-    from transformers.generation.logits_warpers import LogitsWarper
+    from transformers import GenerationMixin
 except ImportError:
     # Fallback for older transformers versions
     from transformers.generation_utils import LogitsWarper
