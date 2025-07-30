@@ -4,6 +4,9 @@ import torch
 
 try:
     from transformers.generation.logits_warpers import LogitsWarper
+except ImportError:
+    # Fallback for older transformers versions
+    from transformers.generation_utils import LogitsWarper
 
 class TypicalLogitsWarper(LogitsWarper):
     def __init__(self, mass: float = 0.9, filter_value: float = -float("Inf"), min_tokens_to_keep: int = 1):
@@ -28,7 +31,7 @@ class TypicalLogitsWarper(LogitsWarper):
         last_ind[last_ind < 0] = 0
         sorted_indices_to_remove = sorted_scores > sorted_scores.gather(1, last_ind.view(-1, 1))
         if self.min_tokens_to_keep > 1:
-            # Keep at least min_tokens_to_keep (set to min_tokens_to_keep-1 because we add the first one below)
+            # Keep at least min_tokens_to_keep
             sorted_indices_to_remove[..., : self.min_tokens_to_keep] = 0
         indices_to_remove = sorted_indices_to_remove.scatter(1, sorted_indices, sorted_indices_to_remove)
 
