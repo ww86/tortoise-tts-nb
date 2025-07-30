@@ -3,10 +3,7 @@ import torch
 # Replace the old import with a new, more robust one
 
 try:
-    from transformers import LogitsWarper
-except ImportError:
-    from transformers.generation_utils import LogitsWarper
-
+    from transformers.generation.logits_warpers import LogitsWarper
 
 class TypicalLogitsWarper(LogitsWarper):
     def __init__(self, mass: float = 0.9, filter_value: float = -float("Inf"), min_tokens_to_keep: int = 1):
